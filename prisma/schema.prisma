@@ -86,6 +86,8 @@ model User {
   sessions      Session[]
   accounts      Account[]
 
+  role String? @default("USER")
+
   @@unique([email])
   @@map("user")
 }
