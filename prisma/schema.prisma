@@ -13,16 +13,127 @@ datasource db {
   provider = "postgresql"
 }
 
-model Reviews{
-    id String @id @default(uuid())
-    booking_id String
-    tutor_id String
-    student_id String
-    rating Int 
-    comment String
-    created_at DateTime @default(now())
-    updated_at DateTime @updatedAt
+model Review {
+  id         String       @id @default(uuid())
+  student_id String // it will come from better auth
+  tutor_id   String
+  tutor      TutorProfile @relation(fields: [tutor_id], references: [id])
+  booking_id String
+  rating     Int
+  comment    String
 
-    @@index([rating])
-    @@index([tutor_id])
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([rating])
+  @@index([tutor_id])
+}
+
+model TutorProfile {
+  id              String  @id @default(uuid())
+  user_id         String // it will come from better auth
+  hourly_rate     Float?
+  experience_year Int?
+  qualification   String?
+  rating_avg      Float?
+  availability    Json?
+
+  category_id String
+  category    Category @relation(fields: [category_id], references: [id])
+
+  created_at DateTime  @default(now())
+  update_at  DateTime  @updatedAt
+  reviews    Review[]
+  bookings   Booking[]
+}
+
+model Category {
+  id          String  @id @default(ulid())
+  category    String  @unique
+  description String?
+  tutor_id    String
+
+  created_at DateTime @default(now())
+  update_at  DateTime @updatedAt
+
+  tutorProfiles TutorProfile[]
+}
+
+model Booking {
+  id         String        @id @default(uuid())
+  tutor_id   String
+  tutor      TutorProfile  @relation(fields: [tutor_id], references: [id])
+  student_id String // it will come from better auth
+  time_slot  String
+  status     BookingStatus @default(PENDING)
+}
+
+enum BookingStatus {
+  COMPLETE
+  CANCELLED
+  PENDING
+  CONFIRMED
+}
+
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
 }
