@@ -31,27 +31,26 @@ model Review {
 
 model TutorProfile {
   id              String  @id @default(uuid())
-  user_id         String // it will come from better auth
+  user_id         String  @unique // it will come from better auth
   hourly_rate     Float?
   experience_year Int?
   qualification   String?
   rating_avg      Float?
-  availability    Json?
 
   category_id String
   category    Category @relation(fields: [category_id], references: [id])
 
-  created_at DateTime  @default(now())
-  update_at  DateTime  @updatedAt
+  created_at DateTime   @default(now())
+  update_at  DateTime   @updatedAt
   reviews    Review[]
   bookings   Booking[]
+  timeSlots  TimeSlot[]
 }
 
 model Category {
   id          String  @id @default(ulid())
   category    String  @unique
   description String?
-  tutor_id    String
 
   created_at DateTime @default(now())
   update_at  DateTime @updatedAt
@@ -60,19 +59,29 @@ model Category {
 }
 
 model Booking {
-  id         String        @id @default(uuid())
+  id         String       @id @default(uuid())
   tutor_id   String
-  tutor      TutorProfile  @relation(fields: [tutor_id], references: [id])
+  tutor      TutorProfile @relation(fields: [tutor_id], references: [id])
   student_id String // it will come from better auth
+  user       User         @relation(fields: [student_id], references: [id])
   time_slot  String
-  status     BookingStatus @default(PENDING)
+
+  status BookingStatus @default(PENDING)
 }
 
-enum BookingStatus {
-  COMPLETE
-  CANCELLED
-  PENDING
-  CONFIRMED
+model TimeSlot {
+  id         String       @id @default(uuid())
+  tutor_id   String
+  tutor      TutorProfile @relation(fields: [tutor_id], references: [id])
+  start_time DateTime
+  end_time   DateTime
+  available  Boolean      @default(false)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([tutor_id])
+  @@index([id])
 }
 
 model User {
@@ -86,7 +95,8 @@ model User {
   sessions      Session[]
   accounts      Account[]
 
-  role String? @default("USER")
+  role     String?   @default("USER")
+  bookings Booking[]
 
   @@unique([email])
   @@map("user")
@@ -138,4 +148,11 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+enum BookingStatus {
+  COMPLETE
+  CANCELLED
+  PENDING
+  CONFIRMED
 }
