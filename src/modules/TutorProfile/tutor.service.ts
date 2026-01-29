@@ -25,7 +25,6 @@ const getTutorProfile = async (user_id: string) => {
             timeSlots:true
         }
     })
-    console.log(result);
     return result
 }
 

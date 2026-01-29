@@ -4,8 +4,8 @@ import { success } from "better-auth"
 
 const createBooking = async (req:Request, res:Response) =>{
     try{
-        
-        const result = await bookingService.createBooking()
+        const user_id = req.user?.id
+        const result = await bookingService.createBooking(req.body, user_id as string)
         res.status(200).json({
             success:true,
             message: "booking success",
@@ -19,4 +19,9 @@ const createBooking = async (req:Request, res:Response) =>{
             error: err
         })
     }
+}
+
+
+export const bookingController = {
+    createBooking,
 }
