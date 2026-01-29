@@ -1,4 +1,5 @@
 import { TutorProfile } from "../../../generated/prisma/client";
+import { TutorProfileWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
 
 
@@ -19,17 +20,53 @@ const getTutorProfile = async (user_id: string) => {
         where: {
             user_id: user_id
         },
-        include:{
-            bookings:true,
-            reviews:true,
-            timeSlots:true
+        include: {
+            bookings: true,
+            reviews: true,
+            timeSlots: true
         }
     })
     return result
 }
 
+const getAllTutor = async ({ search }: {
+    search: string | undefined
+}) => {
+    const whereConditions: TutorProfileWhereInput = {}
+
+    if (search) {
+        whereConditions.OR = [
+            {
+                category: {
+                    category: {
+                        contains: search,
+                        mode: "insensitive"
+                    }
+                }
+            },
+            {
+                category: {
+                    description: {
+                        contains: search,
+                        mode: "insensitive"
+                    }
+                }
+            }
+        ]
+    }
+
+    const allTutor = await prisma.tutorProfile.findMany({
+        include: {
+            category: true
+        },
+        where: whereConditions
+    })
+    return allTutor
+}
+
 
 export const tutorService = {
     createTutorProfile,
-    getTutorProfile
+    getTutorProfile,
+    getAllTutor
 }

@@ -4,7 +4,11 @@ import { auth, UserRole } from "../../middleware/auth";
 
 const router = express.Router()
 
-router.post('/',auth(UserRole.ADMIN, UserRole.TEACHER, UserRole.USER), tutorController.createTutorProfile)
-router.get('/',auth(UserRole.ADMIN, UserRole.TEACHER, UserRole.USER), tutorController.getTutorProfile)
+router.post('/', auth(UserRole.ADMIN, UserRole.TEACHER, UserRole.USER), tutorController.createTutorProfile)
+
+router.get('/myProfile', auth(UserRole.ADMIN, UserRole.TEACHER, UserRole.USER), tutorController.getTutorProfile)
+
+router.get('/', auth(UserRole.ADMIN, UserRole.TEACHER, UserRole.USER), tutorController.getAllTutor)
+
 
 export const tutorRoutes = router;

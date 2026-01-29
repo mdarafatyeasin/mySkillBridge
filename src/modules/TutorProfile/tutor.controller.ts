@@ -22,8 +22,8 @@ const createTutorProfile = async (req: Request, res: Response) => {
     }
 }
 
-const getTutorProfile = async (req:Request, res:Response) =>{
-    try{
+const getTutorProfile = async (req: Request, res: Response) => {
+    try {
         const user_id = req.user?.id
         const result = await tutorService.getTutorProfile(user_id as string);
         res.status(200).json({
@@ -31,7 +31,25 @@ const getTutorProfile = async (req:Request, res:Response) =>{
             message: "teachers data found",
             data: result
         })
-    }catch (err) {
+    } catch (err) {
+        res.status(500).json({
+            message: "Please crate teacher profile",
+            error: err
+        })
+    }
+}
+
+const getAllTutor = async (req: Request, res: Response) => {
+    try {
+        const { search } = req.query;
+        const searchText = search as string | undefined
+        const result = await tutorService.getAllTutor({ search: searchText });
+        res.status(200).json({
+            success: true,
+            message: "teachers data found",
+            data: result
+        })
+    } catch (err) {
         res.status(500).json({
             message: "Please crate teacher profile",
             error: err
@@ -42,5 +60,6 @@ const getTutorProfile = async (req:Request, res:Response) =>{
 
 export const tutorController = {
     createTutorProfile,
-    getTutorProfile
+    getTutorProfile,
+    getAllTutor
 }
