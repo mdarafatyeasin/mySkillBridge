@@ -10,5 +10,7 @@ router.get('/myProfile', auth(UserRole.ADMIN, UserRole.TEACHER, UserRole.USER), 
 
 router.get('/', auth(UserRole.ADMIN, UserRole.TEACHER, UserRole.USER), tutorController.getAllTutor)
 
+router.get('/:id', auth(UserRole.ADMIN, UserRole.TEACHER, UserRole.USER), tutorController.getTutorById)
+
 
 export const tutorRoutes = router;

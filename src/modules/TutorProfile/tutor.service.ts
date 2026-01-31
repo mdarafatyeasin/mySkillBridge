@@ -29,8 +29,9 @@ const getTutorProfile = async (user_id: string) => {
     return result
 }
 
-const getAllTutor = async ({ search }: {
-    search: string | undefined
+const getAllTutor = async ({ search, sortOrder }: {
+    search: string | undefined,
+    sortOrder: 'asc' | 'desc';
 }) => {
     const whereConditions: TutorProfileWhereInput = {}
 
@@ -59,14 +60,32 @@ const getAllTutor = async ({ search }: {
         include: {
             category: true
         },
+        orderBy: {
+            rating_avg: sortOrder
+        },
         where: whereConditions
     })
     return allTutor
+}
+
+const getTutorById = async (tutorId: string) => {
+    const result = await prisma.tutorProfile.findUnique({
+        where: {
+            id: tutorId
+        },
+        include: {
+            bookings: true,
+            reviews: true,
+            timeSlots: true
+        }
+    })
+    return result
 }
 
 
 export const tutorService = {
     createTutorProfile,
     getTutorProfile,
-    getAllTutor
+    getAllTutor,
+    getTutorById
 }

@@ -43,7 +43,8 @@ const getAllTutor = async (req: Request, res: Response) => {
     try {
         const { search } = req.query;
         const searchText = search as string | undefined
-        const result = await tutorService.getAllTutor({ search: searchText });
+        const sortOrder = req.query.sortOrder as 'asc' | 'desc';
+        const result = await tutorService.getAllTutor({ search: searchText, sortOrder });
         res.status(200).json({
             success: true,
             message: "teachers data found",
@@ -57,9 +58,26 @@ const getAllTutor = async (req: Request, res: Response) => {
     }
 }
 
+const getTutorById = async (req:Request, res:Response)=>{
+    try {
+        const tutorId = req.params
+        const result = await tutorService.getTutorById(tutorId.id as string);
+        res.status(200).json({
+            success: true,
+            message: "teachers data found",
+            data: result
+        })
+    } catch (err) {
+        res.status(500).json({
+            message: "Tutor not found",
+            error: err
+        })
+    }
+}
 
 export const tutorController = {
     createTutorProfile,
     getTutorProfile,
-    getAllTutor
+    getAllTutor,
+    getTutorById
 }

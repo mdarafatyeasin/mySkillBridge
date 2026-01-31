@@ -64,7 +64,8 @@ model Booking {
   tutor      TutorProfile @relation(fields: [tutor_id], references: [id])
   student_id String // it will come from better auth
   user       User         @relation(fields: [student_id], references: [id])
-  time_slot  String
+  time_slot  String       @unique
+  slot       TimeSlot     @relation(fields: [time_slot], references: [id])
 
   status BookingStatus @default(PENDING)
 }
@@ -79,6 +80,7 @@ model TimeSlot {
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  booking    Booking?
 
   @@index([tutor_id])
   @@index([id])
