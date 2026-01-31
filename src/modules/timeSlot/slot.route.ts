@@ -5,6 +5,5 @@ import { slotController } from "./slot.controller";
 const router = express.Router()
 
 router.post('/', auth(UserRole.TEACHER), slotController.createSlot);
-router.post('/', auth(UserRole.TEACHER), slotController.createSlot);
 
 export const timeSlot = router;
