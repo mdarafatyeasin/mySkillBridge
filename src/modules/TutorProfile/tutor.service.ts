@@ -58,7 +58,8 @@ const getAllTutor = async ({ search, sortOrder }: {
 
     const allTutor = await prisma.tutorProfile.findMany({
         include: {
-            category: true
+            category: true,
+            user: true
         },
         orderBy: {
             rating_avg: sortOrder

@@ -32,6 +32,7 @@ model Review {
 model TutorProfile {
   id              String  @id @default(uuid())
   user_id         String  @unique // it will come from better auth
+  user            User    @relation(fields: [user_id], references: [id])
   hourly_rate     Float?
   experience_year Int?
   qualification   String?
@@ -97,8 +98,9 @@ model User {
   sessions      Session[]
   accounts      Account[]
 
-  role     String?   @default("USER")
-  bookings Booking[]
+  role          String?        @default("USER")
+  bookings      Booking[]
+  tutorProfiles TutorProfile[]
 
   @@unique([email])
   @@map("user")
