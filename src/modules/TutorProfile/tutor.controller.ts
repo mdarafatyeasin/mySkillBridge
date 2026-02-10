@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { tutorService } from "./tutor.service";
 import { prisma } from "../../lib/prisma";
+import { tutorService } from "./tutor.service";
 
 
 const createTutorProfile = async (req: Request, res: Response) => {

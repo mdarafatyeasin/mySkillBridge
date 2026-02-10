@@ -23,6 +23,22 @@ const getMyBooking = async (userId: string) => {
     })
     return result;
 }
+const getTeacherBooking = async (userId: string) => {
+    const teacherId = await getTeacherId(userId);
+    if(!teacherId){
+        throw new Error("teacher not found");
+    }
+    const result = await prisma.booking.findMany({
+        where: {
+            tutor_id: teacherId
+        },
+        include: {
+            slot: true,
+            user: true
+        }
+    })
+    return result;
+}
 
 
 const getMyBookingById = async (userId: string, bookingId: string) => {
@@ -100,5 +116,6 @@ export const bookingService = {
     getMyBooking,
     getMyBookingById,
     updateMyBooking,
-    updateTeacherBooking
+    updateTeacherBooking,
+    getTeacherBooking
 }

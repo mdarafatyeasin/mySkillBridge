@@ -23,7 +23,9 @@ const getTutorProfile = async (user_id: string) => {
         include: {
             bookings: true,
             reviews: true,
-            timeSlots: true
+            timeSlots: true,
+            user: true,            
+            category: true
         }
     })
     return result
@@ -77,7 +79,9 @@ const getTutorById = async (tutorId: string) => {
         include: {
             bookings: true,
             reviews: true,
-            timeSlots: true
+            timeSlots: true,
+            user: true,
+            category: true
         }
     })
     return result

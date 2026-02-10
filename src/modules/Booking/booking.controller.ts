@@ -23,6 +23,24 @@ const createBooking = async (req: Request, res: Response) => {
     }
 }
 
+const getTeacherBooking = async (req: Request, res: Response) => {
+    try {
+        const user_id = req.user?.id
+        const result = await bookingService.getTeacherBooking(user_id as string)
+        res.status(200).json({
+            success: true,
+            message: "my bookings",
+            bookings: result
+        })
+
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: "booking not found",
+            error: err
+        })
+    }
+}
 const getMyBooking = async (req: Request, res: Response) => {
     try {
         const user_id = req.user?.id
@@ -84,6 +102,7 @@ const updateMyBooking = async (req: Request, res: Response) => {
 }
 
 const updateTeacherBooking = async (req: Request, res: Response) => {
+    console.log("hit in update");
     try {
         const user_id = req.user?.id
         const booking_id = req.params.id
@@ -119,5 +138,6 @@ export const bookingController = {
     getMyBooking,
     getMyBookingById,
     updateMyBooking,
-    updateTeacherBooking
+    updateTeacherBooking,
+    getTeacherBooking
 }
