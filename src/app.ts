@@ -7,6 +7,7 @@ import { timeSlot } from "./modules/timeSlot/slot.route";
 import { categoryRoutes } from "./modules/Category/category.route";
 import { bookingRoutes } from "./modules/Booking/booking.route";
 import { tutorRoutes } from "./modules/TutorProfile/tutor.route";
+import { userRoutes } from "./modules/User/user.route";
 const app: Application = express();
 app.use(express.json());
 
@@ -22,6 +23,7 @@ app.get('/', (req, res) => {
 app.all('/api/auth/{*any}', toNodeHandler(auth));
 
 app.use('/api/v1/review', reviewRoute)
+app.use('/api/v1/user', userRoutes)
 app.use('/api/v1/tutor', tutorRoutes)
 app.use('/api/v1/slot', timeSlot)
 app.use('/api/v1/category', categoryRoutes)

@@ -1,8 +1,8 @@
 import { Review } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 
-const crateReview = async (data: Omit<Review, "id" | "student_id" | "create_at" | "update_at">, user_id: string) => {
-    console.log(data.booking_id);
+const createReview = async (data: Omit<Review, "id" | "student_id" | "create_at" | "update_at">, user_id: string) => {
+    console.log(data, user_id);
 
     if(!user_id){
         throw new Error("user is messing")
@@ -34,5 +34,5 @@ const crateReview = async (data: Omit<Review, "id" | "student_id" | "create_at" 
 
 
 export const reviewService = {
-    crateReview
+    createReview
 };
