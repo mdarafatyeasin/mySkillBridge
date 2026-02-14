@@ -37,7 +37,8 @@ const allUser = async (req: Request, res: Response) => {
 const updateUserProfile = async (req: Request, res: Response) => {
     try {
         const user_id = req.params.id
-        const data = req.body
+        const { role } = req.body
+        const data = role !== undefined ? { role } : {}
         const result = await userService.updateUserProfile(user_id as string, data);
         res.status(200).json({
             success: true,

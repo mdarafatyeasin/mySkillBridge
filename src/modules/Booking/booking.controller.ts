@@ -41,6 +41,7 @@ const getTeacherBooking = async (req: Request, res: Response) => {
         })
     }
 }
+
 const getMyBooking = async (req: Request, res: Response) => {
     try {
         const user_id = req.user?.id
@@ -114,14 +115,18 @@ const updateTeacherBooking = async (req: Request, res: Response) => {
                 message: "User ID not found in request",
             });
         }
+        // console.log(status);
 
         const teacherId = await getTeacherId(user_id)
+        // console.log(teacherId);
         const result = await bookingService.updateTeacherBooking(teacherId as string, booking_id as string, status as BookingStatus)
+        console.log(result);
         res.status(200).json({
             success: true,
             message: "booking updated",
             bookings: result
         })
+        console.log(result);
 
     } catch (err) {
         res.status(500).json({

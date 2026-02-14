@@ -25,7 +25,7 @@ const getMyBooking = async (userId: string) => {
 }
 const getTeacherBooking = async (userId: string) => {
     const teacherId = await getTeacherId(userId);
-    if(!teacherId){
+    if (!teacherId) {
         throw new Error("teacher not found");
     }
     const result = await prisma.booking.findMany({
@@ -39,7 +39,6 @@ const getTeacherBooking = async (userId: string) => {
     })
     return result;
 }
-
 
 const getMyBookingById = async (userId: string, bookingId: string) => {
     const result = await prisma.booking.findUnique({
@@ -83,30 +82,34 @@ const updateMyBooking = async (userId: string, bookingId: string, bookingStatus:
 }
 
 const updateTeacherBooking = async (teacherId: string, bookingId: string, bookingStatus: BookingStatus) => {
-    const isExistBooking = await prisma.booking.findUnique({
-        where: {
-            id: bookingId,
-            tutor_id: teacherId
-        }
-    })
+    // console.log(teacherId, bookingId, bookingStatus);
+    // const isExistBooking = await prisma.booking.findUnique({
+    //     where: {
+    //         id: bookingId,
+    //         tutor_id: teacherId
+    //     }
+    // })
 
-    if (!isExistBooking) {
-        throw new Error("booking not exist");
-    }
+    // // console.log(isExistBooking);
 
-    if (isExistBooking.status === "CANCELLED") {
-        throw new Error("sorry booking is confirmed");
-    }
+    // if (!isExistBooking) {
+    //     throw new Error("booking not exist");
+    // }
+
+    // if (isExistBooking.status === "CANCELLED") {
+    //     throw new Error("sorry booking is cancelled");
+    // }
 
     const result = await prisma.booking.update({
+        where: {
+            id: bookingId,
+            // tutor_id: teacherId
+        },
         data: {
             status: bookingStatus
         },
-        where: {
-            id: bookingId,
-            tutor_id: teacherId
-        }
     })
+
     return result;
 }
 
