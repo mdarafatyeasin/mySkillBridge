@@ -26,6 +26,12 @@ const getTutorProfile = async (req: Request, res: Response) => {
     try {
         const user_id = req.user?.id
         const result = await tutorService.getTutorProfile(user_id as string);
+        if(result.length === 0){
+            return res.status(404).json({
+                success: false,
+                message: "Tutor profile not found",
+            })
+        }
         res.status(200).json({
             success: true,
             message: "teachers data found",

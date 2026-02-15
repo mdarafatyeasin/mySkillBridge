@@ -5,6 +5,7 @@ import { bookingController } from "./booking.controller";
 const router = express.Router()
 
 router.post('/',auth(UserRole.ADMIN, UserRole.TEACHER, UserRole.USER), bookingController.createBooking)
+router.get('/',auth(UserRole.ADMIN, UserRole.TEACHER, UserRole.USER), bookingController.getAllBooking)
 router.get('/myBooking',auth(UserRole.ADMIN, UserRole.TEACHER, UserRole.USER), bookingController.getMyBooking)
 router.get('/TeachersBooking',auth(UserRole.ADMIN, UserRole.TEACHER, UserRole.USER), bookingController.getTeacherBooking)
 router.get('/myBooking/:id',auth(UserRole.ADMIN, UserRole.TEACHER, UserRole.USER), bookingController.getMyBookingById)

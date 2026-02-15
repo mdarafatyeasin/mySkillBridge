@@ -113,6 +113,16 @@ const updateTeacherBooking = async (teacherId: string, bookingId: string, bookin
     return result;
 }
 
+const getAllBooking = async()=>{
+    const result = await prisma.booking.findMany({
+        include:{
+            tutor:true,
+            user:true
+        }
+    })
+    return result
+}
+
 
 export const bookingService = {
     createBooking,
@@ -120,5 +130,6 @@ export const bookingService = {
     getMyBookingById,
     updateMyBooking,
     updateTeacherBooking,
-    getTeacherBooking
+    getTeacherBooking,
+    getAllBooking
 }

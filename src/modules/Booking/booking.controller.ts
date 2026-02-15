@@ -137,6 +137,24 @@ const updateTeacherBooking = async (req: Request, res: Response) => {
     }
 }
 
+const getAllBooking = async (req: Request, res: Response) => {
+    try {
+        const result = await bookingService.getAllBooking()
+        res.status(200).json({
+            success: true,
+            message: "all bookings",
+            bookings: result
+        })
+
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: "booking not found",
+            error: err
+        })
+    }
+}
+
 
 export const bookingController = {
     createBooking,
@@ -144,5 +162,6 @@ export const bookingController = {
     getMyBookingById,
     updateMyBooking,
     updateTeacherBooking,
-    getTeacherBooking
+    getTeacherBooking,
+    getAllBooking
 }
