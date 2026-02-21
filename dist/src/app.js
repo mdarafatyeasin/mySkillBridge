@@ -1,0 +1,29 @@
+import express from "express";
+import { reviewRoute } from "./modules/reviews/review.route";
+import { toNodeHandler } from "better-auth/node";
+import { auth } from "./lib/auth";
+import cors from "cors";
+import { timeSlot } from "./modules/timeSlot/slot.route";
+import { categoryRoutes } from "./modules/Category/category.route";
+import { bookingRoutes } from "./modules/Booking/booking.route";
+import { tutorRoutes } from "./modules/TutorProfile/tutor.route";
+import { userRoutes } from "./modules/User/user.route";
+const app = express();
+app.use(express.json());
+app.use(cors({
+    origin: process.env.APP_URL || "http://localhost:3000",
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
+}));
+app.get('/', (req, res) => {
+    res.send("server is running...");
+});
+app.all('/api/auth/{*any}', toNodeHandler(auth));
+app.use('/api/v1/review', reviewRoute);
+app.use('/api/v1/user', userRoutes);
+app.use('/api/v1/tutor', tutorRoutes);
+app.use('/api/v1/slot', timeSlot);
+app.use('/api/v1/category', categoryRoutes);
+app.use('/api/v1/booking', bookingRoutes);
+export default app;
+//# sourceMappingURL=app.js.map
